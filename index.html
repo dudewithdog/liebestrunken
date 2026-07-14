@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Liebestrunken · Die Chemie der Liebe · Miteinander</title>
+<meta name="description" content="Zehn Fläschchen aus dem Regal der Kräuterhexe. Tippe eine Flasche an.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a45c;
+    --gold-lt: #e6cd98;
+    --cream: #eee1c4;
+    --ink: #1c1410;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #0d0806;
+    color: var(--cream);
+    font-family: "Outfit", sans-serif;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+
+  .stage {
+    position: fixed; inset: 0;
+    overflow: hidden;
+  }
+  .bg {
+    position: absolute; inset: 0;
+    background-image: url('regal.jpg');
+    background-size: cover;
+    background-position: center;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    transition: transform 900ms cubic-bezier(.22,.9,.32,1);
+    will-change: transform;
+  }
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 22%, rgba(6,3,2,.72) 62%, rgba(4,2,1,.92) 100%);
+    opacity: .55;
+    transition: opacity 700ms ease;
+    pointer-events: none;
+  }
+  .stage.zoomed .vignette { opacity: .86; }
+
+  /* Kopf */
+  .topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    padding: max(22px, env(safe-area-inset-top)) 22px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 30;
+    background: linear-gradient(180deg, rgba(8,5,3,.65), rgba(8,5,3,0));
+    transition: opacity 400ms ease;
+  }
+  .topbar a {
+    color: var(--gold-lt); text-decoration: none; font-size: .82rem; font-weight: 600;
+    letter-spacing: .06em; border: 1px solid rgba(230,205,152,.4); padding: 7px 13px; border-radius: 999px;
+  }
+  .topbar .titlewrap { text-align: right; }
+  .topbar h1 {
+    margin: 0; font-family: "IBM Plex Serif", serif; font-weight: 700; font-size: 1.15rem; color: var(--cream);
+  }
+  .topbar p { margin: 1px 0 0; font-size: .72rem; color: var(--gold-lt); opacity: .9; }
+
+  /* Hinweis beim ersten Laden */
+  .hint {
+    position: absolute; left: 50%; bottom: 46px; transform: translateX(-50%);
+    font-family: "Caveat", cursive; font-size: 1.5rem; color: var(--gold-lt);
+    text-align: center; z-index: 25; pointer-events: none;
+    animation: fadeHint 5s ease forwards;
+    text-shadow: 0 2px 10px rgba(0,0,0,.7);
+  }
+  @keyframes fadeHint { 0%,60% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Hotspots */
+  .spot {
+    position: absolute;
+    width: 54px; height: 54px; margin: -27px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+    display: grid; place-items: center;
+    transition: opacity 350ms ease, transform 350ms ease;
+  }
+  .spot .dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    background: var(--gold-lt);
+    box-shadow: 0 0 0 0 rgba(230,205,152,.55);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(230,205,152,.55); }
+    70%  { box-shadow: 0 0 0 16px rgba(230,205,152,0); }
+    100% { box-shadow: 0 0 0 0 rgba(230,205,152,0); }
+  }
+  .stage.zoomed .spot { opacity: 0; pointer-events: none; transform: scale(.6); }
+  .spot.active { opacity: 0 !important; }
+
+  /* Karte mit Erklaerung */
+  .card {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 26px 24px max(26px, env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(10,6,4,0) 0%, rgba(10,6,4,.88) 24%, rgba(8,5,3,.97) 100%);
+    transform: translateY(115%);
+    transition: transform 520ms cubic-bezier(.22,.9,.32,1);
+    z-index: 28;
+  }
+  .stage.zoomed .card { transform: translateY(0); }
+
+  .card .eyebrow {
+    font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold);
+    margin: 0 0 6px;
+  }
+  .card .label {
+    display: inline-block;
+    font-family: "Caveat", cursive; font-weight: 700; font-size: 2.1rem;
+    color: var(--ink);
+    background: var(--cream);
+    padding: 6px 20px 8px;
+    border-radius: 3px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.4);
+    transform: rotate(-1.2deg);
+    margin: 0 0 14px;
+  }
+  .card p.txt {
+    margin: 0; font-family: "IBM Plex Serif", serif; font-size: 1.02rem; line-height: 1.5;
+    color: var(--cream); max-width: 540px;
+  }
+  .card .closehint {
+    margin-top: 16px; font-size: .78rem; color: var(--gold-lt); opacity: .8;
+  }
+
+  .backtap {
+    position: absolute; inset: 0; z-index: 27; display: none;
+  }
+  .stage.zoomed .backtap { display: block; }
+
+  .progress {
+    position: absolute; left: 22px; right: 22px; bottom: env(safe-area-inset-bottom, 0px);
+    display: flex; gap: 6px; padding-bottom: 10px; z-index: 26;
+    transition: opacity 400ms ease;
+  }
+  .stage.zoomed .progress { opacity: 0; pointer-events: none; }
+  .progress i {
+    flex: 1; height: 3px; border-radius: 3px; background: rgba(230,205,152,.22);
+  }
+  .progress i.seen { background: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="bg" id="bg"></div>
+  <div class="vignette" id="vignette"></div>
+
+  <div class="topbar">
+    <a href="#" id="resetLink">← Zurück</a>
+    <div class="titlewrap">
+      <h1>Liebestrunken</h1>
+      <p>Die Chemie der Liebe</p>
+    </div>
+  </div>
+
+  <p class="hint">Tippe eine Flasche an …</p>
+
+  <!-- Hotspots (Prozentpositionen ueber dem Regalfoto) -->
+  <button class="spot" data-x="15" data-y="41" data-name="Adrenalin" data-cat="Die erste Begegnung"
+    data-text="Herzrasen, feuchte Hände: Der Körper reagiert auf Verliebtheit fast wie auf Gefahr."
+    style="left:15%; top:41%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="29" data-y="38" data-name="Serotonin ↓" data-cat="Das Verliebtsein"
+    data-text="Verliebte haben nachweislich niedrigere Werte, ähnlich wie bei Zwangsgedanken. Man bekommt die Person einfach nicht aus dem Kopf."
+    style="left:29%; top:38%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="44" data-y="36" data-name="Phenylethylamin" data-cat="Die erste Begegnung"
+    data-text="Ein körpereigener, amphetaminähnlicher Stoff. Verantwortlich für das Kribbeln und die Euphorie ganz am Anfang."
+    style="left:44%; top:36%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="60" data-y="40" data-name="Vasopressin" data-cat="Die Bindung"
+    data-text="Mitverantwortlich für Treue und Bindung, aus Wühlmausversuchen bekannt, die eine ganze Monogamie-Forschung auslösten."
+    style="left:60%; top:40%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="77" data-y="35" data-name="Dopamin bleibt" data-cat="Die lange Liebe"
+    data-text="Bei Paaren, die auch nach Jahrzehnten noch verliebt sind, zeigen Hirnscans weiterhin aktive Belohnungszentren."
+    style="left:77%; top:35%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="13" data-y="70" data-name="Liebeskummer" data-cat="Der Schmerz"
+    data-text="Zurückweisung aktiviert dieselben Hirnareale wie körperlicher Schmerz. «Es tut wirklich weh» ist neurologisch korrekt."
+    style="left:13%; top:70%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="28" data-y="70" data-name="Die Nase weiss es" data-cat="Die Bindung"
+    data-text="Eine Studie liess Frauen an T-Shirts riechen: Am liebsten mochten sie Männer, deren Immunsystem sich am meisten von ihrem eigenen unterschied."
+    style="left:28%; top:70%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="44" data-y="68" data-name="Dopamin" data-cat="Das Verliebtsein"
+    data-text="Das Belohnungssystem, dieselbe Bahn, die auch süchtig macht. Erklärt das ständige Gedankenkreisen."
+    style="left:44%; top:68%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="60" data-y="70" data-name="Der blinde Blick" data-cat="Das Verliebtsein"
+    data-text="Beim Anblick des Partners fahren jene Hirnregionen herunter, die sonst kritisch urteilen."
+    style="left:60%; top:70%;"><span class="dot"></span></button>
+
+  <button class="spot" data-x="76" data-y="70" data-name="Oxytocin" data-cat="Die Bindung"
+    data-text="Das «Kuschelhormon», ausgeschüttet bei Berührung, Sex und Geburt. Verantwortlich für Vertrauen und Nähe."
+    style="left:76%; top:70%;"><span class="dot"></span></button>
+
+  <div class="backtap" id="backtap"></div>
+
+  <div class="card" id="card">
+    <p class="eyebrow" id="cardCat">Kategorie</p>
+    <span class="label" id="cardName">Name</span>
+    <p class="txt" id="cardText">Text</p>
+    <p class="closehint">Irgendwo antippen, um zurückzukehren</p>
+  </div>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const bg = document.getElementById('bg');
+  const vignette = document.getElementById('vignette');
+  const spots = Array.from(document.querySelectorAll('.spot'));
+  const card = document.getElementById('card');
+  const cardName = document.getElementById('cardName');
+  const cardCat = document.getElementById('cardCat');
+  const cardText = document.getElementById('cardText');
+  const backtap = document.getElementById('backtap');
+  const resetLink = document.getElementById('resetLink');
+  const progress = document.getElementById('progress');
+
+  const seen = new Set();
+  spots.forEach((s, i) => {
+    const bar = document.createElement('i');
+    bar.dataset.idx = i;
+    progress.appendChild(bar);
+  });
+
+  function openSpot(spot) {
+    const x = spot.dataset.x, y = spot.dataset.y;
+    vignette.style.setProperty('--fx', x + '%');
+    vignette.style.setProperty('--fy', y + '%');
+    // Zoom: transform-origin auf die Flaschenposition legen, dann skalieren
+    bg.style.transformOrigin = x + '% ' + y + '%';
+    bg.style.transform = 'scale(2.35)';
+    stage.classList.add('zoomed');
+
+    cardCat.textContent = spot.dataset.cat;
+    cardName.textContent = spot.dataset.name;
+    cardText.textContent = spot.dataset.text;
+
+    spots.forEach(s => s.classList.remove('active'));
+    spot.classList.add('active');
+
+    const idx = spots.indexOf(spot);
+    seen.add(idx);
+    const bar = progress.children[idx];
+    if (bar) bar.classList.add('seen');
+  }
+
+  function closeZoom() {
+    bg.style.transform = 'scale(1)';
+    stage.classList.remove('zoomed');
+    spots.forEach(s => s.classList.remove('active'));
+  }
+
+  spots.forEach(spot => {
+    spot.addEventListener('click', (e) => { e.stopPropagation(); openSpot(spot); });
+  });
+  backtap.addEventListener('click', closeZoom);
+  resetLink.addEventListener('click', (e) => { e.preventDefault(); closeZoom(); });
+</script>
+
+</body>
+</html>
