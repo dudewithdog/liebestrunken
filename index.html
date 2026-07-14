@@ -31,10 +31,23 @@
   .stage {
     position: fixed; inset: 0;
     overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: #0d0806;
+  }
+  /* .frame haelt IMMER das Original-Seitenverhaeltnis des Fotos ein, damit auf
+     jedem Bildschirm (Handy, Tablet, quer, hoch) alle zehn Flaschen sichtbar und
+     antippbar bleiben. Auf stark abweichenden Formaten entstehen schmale
+     Balken statt eines Zuschnitts, der Inhalt verschluckt. */
+  .frame {
+    position: relative;
+    height: 100%; width: 100%;
+    max-width: calc(100vh * 1054 / 1492);
+    max-height: calc(100vw * 1492 / 1054);
+    margin: 0 auto;
   }
   .bg {
     position: absolute; inset: 0;
-    background-image: url('regal.jpg');
+    background-image: url('regal.jpeg');
     background-size: cover;
     background-position: center;
     transform: scale(1);
@@ -160,6 +173,7 @@
 <body>
 
 <div class="stage" id="stage">
+<div class="frame" id="frame">
   <div class="bg" id="bg"></div>
   <div class="vignette" id="vignette"></div>
 
@@ -175,44 +189,34 @@
 
   <!-- Hotspots (Prozentpositionen ueber dem Regalfoto) -->
   <button class="spot" data-x="15" data-y="41" data-name="Adrenalin" data-cat="Die erste Begegnung"
-    data-text="Herzrasen, feuchte Hände: Der Körper reagiert auf Verliebtheit fast wie auf Gefahr."
-    style="left:15%; top:41%;"><span class="dot"></span></button>
+    data-text="Herzrasen, feuchte Hände: Der Körper reagiert auf Verliebtheit fast wie auf Gefahr."><span class="dot"></span></button>
 
   <button class="spot" data-x="29" data-y="38" data-name="Serotonin ↓" data-cat="Das Verliebtsein"
-    data-text="Verliebte haben nachweislich niedrigere Werte, ähnlich wie bei Zwangsgedanken. Man bekommt die Person einfach nicht aus dem Kopf."
-    style="left:29%; top:38%;"><span class="dot"></span></button>
+    data-text="Verliebte haben nachweislich niedrigere Werte, ähnlich wie bei Zwangsgedanken. Man bekommt die Person einfach nicht aus dem Kopf."><span class="dot"></span></button>
 
   <button class="spot" data-x="44" data-y="36" data-name="Phenylethylamin" data-cat="Die erste Begegnung"
-    data-text="Ein körpereigener, amphetaminähnlicher Stoff. Verantwortlich für das Kribbeln und die Euphorie ganz am Anfang."
-    style="left:44%; top:36%;"><span class="dot"></span></button>
+    data-text="Ein körpereigener, amphetaminähnlicher Stoff. Verantwortlich für das Kribbeln und die Euphorie ganz am Anfang."><span class="dot"></span></button>
 
   <button class="spot" data-x="60" data-y="40" data-name="Vasopressin" data-cat="Die Bindung"
-    data-text="Mitverantwortlich für Treue und Bindung, aus Wühlmausversuchen bekannt, die eine ganze Monogamie-Forschung auslösten."
-    style="left:60%; top:40%;"><span class="dot"></span></button>
+    data-text="Mitverantwortlich für Treue und Bindung, aus Wühlmausversuchen bekannt, die eine ganze Monogamie-Forschung auslösten."><span class="dot"></span></button>
 
   <button class="spot" data-x="77" data-y="35" data-name="Dopamin bleibt" data-cat="Die lange Liebe"
-    data-text="Bei Paaren, die auch nach Jahrzehnten noch verliebt sind, zeigen Hirnscans weiterhin aktive Belohnungszentren."
-    style="left:77%; top:35%;"><span class="dot"></span></button>
+    data-text="Bei Paaren, die auch nach Jahrzehnten noch verliebt sind, zeigen Hirnscans weiterhin aktive Belohnungszentren."><span class="dot"></span></button>
 
   <button class="spot" data-x="13" data-y="70" data-name="Liebeskummer" data-cat="Der Schmerz"
-    data-text="Zurückweisung aktiviert dieselben Hirnareale wie körperlicher Schmerz. «Es tut wirklich weh» ist neurologisch korrekt."
-    style="left:13%; top:70%;"><span class="dot"></span></button>
+    data-text="Zurückweisung aktiviert dieselben Hirnareale wie körperlicher Schmerz. «Es tut wirklich weh» ist neurologisch korrekt."><span class="dot"></span></button>
 
   <button class="spot" data-x="28" data-y="70" data-name="Die Nase weiss es" data-cat="Die Bindung"
-    data-text="Eine Studie liess Frauen an T-Shirts riechen: Am liebsten mochten sie Männer, deren Immunsystem sich am meisten von ihrem eigenen unterschied."
-    style="left:28%; top:70%;"><span class="dot"></span></button>
+    data-text="Eine Studie liess Frauen an T-Shirts riechen: Am liebsten mochten sie Männer, deren Immunsystem sich am meisten von ihrem eigenen unterschied."><span class="dot"></span></button>
 
   <button class="spot" data-x="44" data-y="68" data-name="Dopamin" data-cat="Das Verliebtsein"
-    data-text="Das Belohnungssystem, dieselbe Bahn, die auch süchtig macht. Erklärt das ständige Gedankenkreisen."
-    style="left:44%; top:68%;"><span class="dot"></span></button>
+    data-text="Das Belohnungssystem, dieselbe Bahn, die auch süchtig macht. Erklärt das ständige Gedankenkreisen."><span class="dot"></span></button>
 
   <button class="spot" data-x="60" data-y="70" data-name="Der blinde Blick" data-cat="Das Verliebtsein"
-    data-text="Beim Anblick des Partners fahren jene Hirnregionen herunter, die sonst kritisch urteilen."
-    style="left:60%; top:70%;"><span class="dot"></span></button>
+    data-text="Beim Anblick des Partners fahren jene Hirnregionen herunter, die sonst kritisch urteilen."><span class="dot"></span></button>
 
   <button class="spot" data-x="76" data-y="70" data-name="Oxytocin" data-cat="Die Bindung"
-    data-text="Das «Kuschelhormon», ausgeschüttet bei Berührung, Sex und Geburt. Verantwortlich für Vertrauen und Nähe."
-    style="left:76%; top:70%;"><span class="dot"></span></button>
+    data-text="Das «Kuschelhormon», ausgeschüttet bei Berührung, Sex und Geburt. Verantwortlich für Vertrauen und Nähe."><span class="dot"></span></button>
 
   <div class="backtap" id="backtap"></div>
 
@@ -225,9 +229,14 @@
 
   <div class="progress" id="progress"></div>
 </div>
+</div>
 
 <script>
+  // Bekannte Originalgroesse des Fotos (fuer exaktes Cover-Mapping)
+  const IMG_W = 1054, IMG_H = 1492;
+
   const stage = document.getElementById('stage');
+  const frame = document.getElementById('frame');
   const bg = document.getElementById('bg');
   const vignette = document.getElementById('vignette');
   const spots = Array.from(document.querySelectorAll('.spot'));
@@ -246,12 +255,41 @@
     progress.appendChild(bar);
   });
 
+  // Repliziert die CSS "background-size: cover"-Mathematik, um die tatsaechliche
+  // Bildschirmposition jedes Bildpunkts zu berechnen.
+  function coverMap() {
+    const cw = frame.clientWidth, ch = frame.clientHeight;
+    const scale = Math.max(cw / IMG_W, ch / IMG_H);
+    const rw = IMG_W * scale, rh = IMG_H * scale;
+    const ox = (cw - rw) / 2, oy = (ch - rh) / 2;
+    return { cw, ch, scale, rw, rh, ox, oy };
+  }
+
+  // Fuer jeden Hotspot: Bild-Prozent -> Bildschirm-Pixel, plus die passenden
+  // Container-Prozente fuer Vignette-Mittelpunkt und Zoom-transform-origin.
+  function layout() {
+    const m = coverMap();
+    spots.forEach(spot => {
+      const px = parseFloat(spot.dataset.x) / 100 * IMG_W;
+      const py = parseFloat(spot.dataset.y) / 100 * IMG_H;
+      const sx = m.ox + px * m.scale;
+      const sy = m.oy + py * m.scale;
+      spot.style.left = sx + 'px';
+      spot.style.top = sy + 'px';
+      spot.dataset.cx = (sx / m.cw * 100).toFixed(2);
+      spot.dataset.cy = (sy / m.ch * 100).toFixed(2);
+    });
+  }
+  layout();
+  window.addEventListener('resize', layout);
+  window.addEventListener('orientationchange', layout);
+
   function openSpot(spot) {
-    const x = spot.dataset.x, y = spot.dataset.y;
-    vignette.style.setProperty('--fx', x + '%');
-    vignette.style.setProperty('--fy', y + '%');
-    // Zoom: transform-origin auf die Flaschenposition legen, dann skalieren
-    bg.style.transformOrigin = x + '% ' + y + '%';
+    const cx = spot.dataset.cx, cy = spot.dataset.cy;
+    vignette.style.setProperty('--fx', cx + '%');
+    vignette.style.setProperty('--fy', cy + '%');
+    // Zoom: transform-origin auf die tatsaechliche Bildschirmposition der Flasche legen
+    bg.style.transformOrigin = cx + '% ' + cy + '%';
     bg.style.transform = 'scale(2.35)';
     stage.classList.add('zoomed');
 
